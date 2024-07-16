@@ -113,21 +113,21 @@ def main():
     # Decontaminate benchmarks
     ##########################
     num_raw_train_samples = len(raw_datasets["train"])
-    raw_datasets = raw_datasets.filter(
-        decontaminate_humaneval,
-        fn_kwargs={"text_column": "text_chosen"},
-        batched=True,
-        batch_size=10_000,
-        num_proc=1,
-        desc="Decontaminating HumanEval samples",
-    )
+    # raw_datasets = raw_datasets.filter(
+    #     decontaminate_humaneval,
+    #     fn_kwargs={"text_column": "text_chosen"},
+    #     batched=True,
+    #     batch_size=10_000,
+    #     num_proc=1,
+    #     desc="Decontaminating HumanEval samples",
+    # )
     num_filtered_train_samples = num_raw_train_samples - len(raw_datasets["train"])
     logger.info(
         f"Decontaminated {num_filtered_train_samples} ({num_filtered_train_samples/num_raw_train_samples * 100:.2f}%) samples from the training set."
     )
 
     # Replace column names with what TRL needs, text_chosen -> chosen and text_rejected -> rejected
-    for split in ["train", "test"]:
+    for split in ["train"]:
         raw_datasets[split] = raw_datasets[split].rename_columns(
             {"text_prompt": "prompt", "text_chosen": "chosen", "text_rejected": "rejected"}
         )
@@ -195,7 +195,7 @@ def main():
         args=training_args,
         beta=training_args.beta,
         train_dataset=raw_datasets["train"],
-        eval_dataset=raw_datasets["test"],
+        # eval_dataset=raw_datasets["test"],
         tokenizer=tokenizer,
         max_length=training_args.max_length,
         max_prompt_length=training_args.max_prompt_length,
@@ -246,7 +246,7 @@ def main():
     if training_args.do_eval:
         logger.info("*** Evaluate ***")
         metrics = trainer.evaluate()
-        metrics["eval_samples"] = len(raw_datasets["test"])
+        # metrics["eval_samples"] = len(raw_datasets["test"])
         trainer.log_metrics("eval", metrics)
         trainer.save_metrics("eval", metrics)
 
