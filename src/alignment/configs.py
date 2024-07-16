@@ -284,6 +284,10 @@ class DPOConfig(transformers.TrainingArguments):
     optim: Optional[str] = field(default="rmsprop")
     remove_unused_columns: bool = field(default=False)
     loss_type: Optional[str] = field(default="sigmoid", metadata={"help": ("The loss type for DPO.")})
+    generate_during_eval: bool = field(
+        default=False,
+        metadata={"help": "Whether to sample and log generations during evaluation step."},
+    )
 
 
 @dataclass
