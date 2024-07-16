@@ -187,6 +187,7 @@ def main():
     #########################
     # Instantiate DPO trainer
     #########################
+    training_args.generate_during_eval = False
     trainer = DPOTrainer(
         model,
         ref_model,
@@ -201,7 +202,7 @@ def main():
         max_prompt_length=training_args.max_prompt_length,
         peft_config=get_peft_config(model_args),
         loss_type=training_args.loss_type,
-        generate_during_eval=False,
+        # generate_during_eval=False,
     )
 
     ###############
