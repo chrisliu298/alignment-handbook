@@ -34,4 +34,3 @@ save_total_limit: 1
 seed: 42
 warmup_ratio: 0.03
 report_to: wandb
-generate_during_eval: false
