@@ -5,7 +5,7 @@ torch_dtype: null
 # Data training arguments
 # For definitions, see: src/h4/training/config.py
 dataset_mixer:
-  RLHFlow/UltraFeedback-preference-standard: 1.0
+  UltraFeedback-preference-standard: 1.0
 dataset_splits:
 - train
 preprocessing_num_workers: 32
