@@ -340,6 +340,6 @@ class ORPOConfig(transformers.TrainingArguments):
     )
 
     dataset_num_proc: Optional[int] = field(
-        default=None,
+        default=os.cpu_count(),
         metadata={"help": ("The number of workers to use to tokenize the data.")},
     )
