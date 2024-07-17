@@ -27,16 +27,16 @@ from alignment import (
     H4ArgumentParser,
     ModelArguments,
     apply_chat_template,
-    decontaminate_humaneval,
+    # decontaminate_humaneval,
     get_checkpoint,
     get_datasets,
     get_kbit_device_map,
-    get_peft_config,
+    # get_peft_config,
     get_quantization_config,
     get_tokenizer,
     is_adapter_model,
 )
-from peft import PeftConfig, PeftModel
+# from peft import PeftConfig, PeftModel
 from trl import DPOTrainer
 
 
@@ -154,35 +154,35 @@ def main():
     )
 
     model = model_args.model_name_or_path
-    if is_adapter_model(model, model_args.model_revision) is True:
-        logger.info(f"Loading SFT adapter for {model_args.model_name_or_path=}")
-        peft_config = PeftConfig.from_pretrained(model_args.model_name_or_path, revision=model_args.model_revision)
-        model_kwargs = dict(
-            revision=model_args.base_model_revision,
-            trust_remote_code=model_args.trust_remote_code,
-            use_flash_attention_2=model_args.use_flash_attention_2,
-            torch_dtype=torch_dtype,
-            use_cache=False if training_args.gradient_checkpointing else True,
-            device_map=get_kbit_device_map() if quantization_config is not None else None,
-            quantization_config=quantization_config,
-        )
-        base_model = AutoModelForCausalLM.from_pretrained(
-            peft_config.base_model_name_or_path,
-            **model_kwargs,
-        )
-        model = PeftModel.from_pretrained(
-            base_model,
-            model_args.model_name_or_path,
-            revision=model_args.model_revision,
-        )
-        model_kwargs = None
+    # if is_adapter_model(model, model_args.model_revision) is True:
+    #     logger.info(f"Loading SFT adapter for {model_args.model_name_or_path=}")
+    #     peft_config = PeftConfig.from_pretrained(model_args.model_name_or_path, revision=model_args.model_revision)
+    #     model_kwargs = dict(
+    #         revision=model_args.base_model_revision,
+    #         trust_remote_code=model_args.trust_remote_code,
+    #         use_flash_attention_2=model_args.use_flash_attention_2,
+    #         torch_dtype=torch_dtype,
+    #         use_cache=False if training_args.gradient_checkpointing else True,
+    #         device_map=get_kbit_device_map() if quantization_config is not None else None,
+    #         quantization_config=quantization_config,
+    #     )
+    #     base_model = AutoModelForCausalLM.from_pretrained(
+    #         peft_config.base_model_name_or_path,
+    #         **model_kwargs,
+    #     )
+    #     model = PeftModel.from_pretrained(
+    #         base_model,
+    #         model_args.model_name_or_path,
+    #         revision=model_args.model_revision,
+    #     )
+    #     model_kwargs = None
 
     ref_model = model
     ref_model_kwargs = model_kwargs
 
-    if model_args.use_peft is True:
-        ref_model = None
-        ref_model_kwargs = None
+    # if model_args.use_peft is True:
+    #     ref_model = None
+    #     ref_model_kwargs = None
 
     #########################
     # Instantiate DPO trainer
@@ -200,7 +200,7 @@ def main():
         tokenizer=tokenizer,
         max_length=training_args.max_length,
         max_prompt_length=training_args.max_prompt_length,
-        peft_config=get_peft_config(model_args),
+        # peft_config=get_peft_config(model_args),
         loss_type=training_args.loss_type,
         # generate_during_eval=False,
     )
